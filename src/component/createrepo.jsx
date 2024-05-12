@@ -21,12 +21,12 @@ function Createrepo({ onRepoCreated }) {
                 readme: readmeContent ? { content: readmeContent } : null
             }, {
                 headers: {
-                    Authorization: `token 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`, // Replace YOUR_ACCESS_TOKEN with your GitHub access token
+                    Authorization: `token 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`, 
                 }
             });
             if (response.status === 201) {
                 toast.success("Repository Created")
-                onRepoCreated(inputRepoName); // Pass the name of the newly created repository
+                onRepoCreated(inputRepoName); 
             } else {
                 throw new Error('Failed to create repository');
             }
@@ -39,19 +39,20 @@ function Createrepo({ onRepoCreated }) {
     return (
         <div>
             <div>
-                <button className="btn btn-primary" onClick={() => setShow(!show)}>Create new repo</button>
+                <button className="btn btn-primary" onClick={() => setShow(!show)}>{show ? "Close" : "Create new repo"}</button>
                 {show && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginTop: "20px" }}>
-                        <label>
-                            <input type="checkbox" checked={isPrivate} onChange={() => setIsPrivate(!isPrivate)} />
-                            Private
-                        </label>
-                        <label>
-                            README Content:
-                            <textarea value={readmeContent} onChange={(e) => setReadmeContent(e.target.value)} />
-                        </label>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginTop: "20px" }} className='parent'>
                         <input type="text" value={inputRepoName} onChange={handleInputchange} placeholder="Repository Name" />
-                        <button onClick={handleCreateRepo}>Create</button>
+                        <div className='hello'>
+                            <label>
+                                <input type="checkbox" checked={isPrivate} onChange={() => setIsPrivate(!isPrivate)} />
+                                Private
+                            </label>
+                            <label>
+                                <input value={readmeContent} onChange={(e) => setReadmeContent(e.target.value)} placeholder=' Enter ReadMe:Text' />
+                            </label>
+                        </div>
+                        <button onClick={handleCreateRepo} className='create'>Create</button>
                     </div>
                 )}
             </div>

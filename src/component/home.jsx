@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Createrepo from './createrepo';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import DeleteRepo from './Deleterepo';
 import RepositoryInfo from './RepositoryInfo';
 
 function Home({ checked }) {
     const [repositories, setRepositories] = useState(["Add New Repo"]);
     const [modalIndex, setModalIndex] = useState(null);
     const [selectedRepo, setSelectedRepo] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const addRepository = (newRepo) => {
         setRepositories([...repositories, newRepo]);
@@ -16,7 +18,7 @@ function Home({ checked }) {
     const handleDeleteRepo = async (index) => {
         try {
             const repoToDelete = repositories[index];
-            const response = await axios.delete(`https://api.github.com/repos/opemibilal/${repoToDelete}`, {
+            const response = await axios.delete(`https://api.github.com/repos/feyishewa/${repoToDelete}`, {
                 headers: {
                     Authorization: `token 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`, // Replace  with your GitHub access token
                 },
@@ -24,6 +26,7 @@ function Home({ checked }) {
             if (response.status === 204) {
                 setRepositories(repositories.filter((_, i) => i !== index));
                 setModalIndex(null); 
+                setShowModal(false);
             } else {
                 toast.error('Failed to delete repository');
             }
@@ -34,21 +37,23 @@ function Home({ checked }) {
 
     const handleModal = (index) => {
         setModalIndex(index); 
+        setShowModal(true);
     };
 
     const handleNotDeleteRepo = () => {
         setModalIndex(null);
+        setShowModal(false);
     };
 
     const handleUpdateRepo = async (index) => {
         try {
             const newName = prompt("Enter the new name for the repository:");
             if (newName !== null && newName.trim() !== '') {
-                const response = await axios.patch(`https://api.github.com/repos/opemibilal/${repositories[index]}`, {
+                const response = await axios.patch(`https://api.github.com/repos/feyishewa/${repositories[index]}`, {
                     name: newName,
                 }, {
                     headers: {
-                        Authorization: `token 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`, // Replace YOUR_ACCESS_TOKEN with your GitHub access token
+                        Authorization: `token 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`,
                     },
                 });
                 if (response.status === 200) {
@@ -65,9 +70,9 @@ function Home({ checked }) {
     };
     const handleViewInfo = async (repoName) => {
         try {
-            const response = await axios.get(`https://api.github.com/repos/opemibilal/${repoName}`, {
+            const response = await axios.get(`https://api.github.com/repos/feyishewa/${repoName}`, {
                 headers: {
-                    Authorization: `token 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`, // Replace YOUR_ACCESS_TOKEN with your GitHub access token
+                    Authorization: `token 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`,
                 },
             });
             if (response.status === 200) {
@@ -111,13 +116,14 @@ function Home({ checked }) {
                             <div>
                                 <h6>Are You Sure You Want to delete this repository</h6>
                                 <div style={{ display: "flex", gap: "20px", }}>
-                                    <button onClick={() => handleDeleteRepo(index)} style={{}}>Yes</button>
+                                    <button onClick={() => handleDeleteRepo(index)} style={{width: "90px"}}>Yes</button>
                                     <button onClick={handleNotDeleteRepo}>No</button>
                                 </div>
                             </div>
                         )}
                     </div>
                 ))}
+                  {showModal && <DeleteModal onConfirm={() => handleDeleteRepo(modalIndex)} onCancel={handleNotDeleteRepo} />}
             </div>
 
             <div className="footer d-flex" style={{ justifyContent: "center", paddingTop: "20px" }}>
@@ -130,6 +136,7 @@ function Home({ checked }) {
             </div>
 
             {selectedRepo && <RepositoryInfo repo={selectedRepo} onClose={() => setSelectedRepo(null)} />}
+            
         </div>
     );
 }
