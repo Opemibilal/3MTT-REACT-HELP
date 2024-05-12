@@ -4,7 +4,7 @@ function DeleteRepo({ onConfirm, onCancel }) {
     return (
         <div className="modal">
             <div className="modal-content">
-                <h2>Are you sure you want to delete this repository?</h2>
+                <h6>Are you sure you want to delete this repository?</h6>
                 <div className="button-group">
                     <button onClick={onConfirm}>Yes</button>
                     <button onClick={onCancel}>No</button>

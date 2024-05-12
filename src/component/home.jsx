@@ -18,11 +18,13 @@ function Home({ checked }) {
     const handleDeleteRepo = async (index) => {
         try {
             const repoToDelete = repositories[index];
+            console.log('Repo to delete:', repoToDelete); // Log the repository name for debugging
             const response = await axios.delete(`https://api.github.com/repos/feyishewa/${repoToDelete}`, {
                 headers: {
-                    Authorization: `token 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`, // Replace  with your GitHub access token
+                    Authorization: `token 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`,
                 },
             });
+            console.log('Delete response:', response);
             if (response.status === 204) {
                 setRepositories(repositories.filter((_, i) => i !== index));
                 setModalIndex(null); 
@@ -31,9 +33,11 @@ function Home({ checked }) {
                 toast.error('Failed to delete repository');
             }
         } catch (error) {
+            console.error('Error deleting repository:', error);
             toast.error('Error deleting repository:', error);
         }
     };
+    
 
     const handleModal = (index) => {
         setModalIndex(index); 
@@ -53,7 +57,7 @@ function Home({ checked }) {
                     name: newName,
                 }, {
                     headers: {
-                        Authorization: `token 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`,
+                        Authorization: `token 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`,
                     },
                 });
                 if (response.status === 200) {
@@ -72,7 +76,7 @@ function Home({ checked }) {
         try {
             const response = await axios.get(`https://api.github.com/repos/feyishewa/${repoName}`, {
                 headers: {
-                    Authorization: `token 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`,
+                    Authorization: `token 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`,
                 },
             });
             if (response.status === 200) {
@@ -115,15 +119,15 @@ function Home({ checked }) {
                         {modalIndex === index && (
                             <div>
                                 <h6>Are You Sure You Want to delete this repository</h6>
-                                <div style={{ display: "flex", gap: "20px", }}>
+                                {/* <div style={{ display: "flex", gap: "20px", }}>
                                     <button onClick={() => handleDeleteRepo(index)} style={{width: "90px"}}>Yes</button>
                                     <button onClick={handleNotDeleteRepo}>No</button>
-                                </div>
+                                </div> */}
                             </div>
                         )}
                     </div>
                 ))}
-                  {showModal && <DeleteModal onConfirm={() => handleDeleteRepo(modalIndex)} onCancel={handleNotDeleteRepo} />}
+                  {showModal && <DeleteRepo onConfirm={() => handleDeleteRepo(modalIndex)} onCancel={handleNotDeleteRepo} />}
             </div>
 
             <div className="footer d-flex" style={{ justifyContent: "center", paddingTop: "20px" }}>

@@ -21,7 +21,7 @@ function Createrepo({ onRepoCreated }) {
                 readme: readmeContent ? { content: readmeContent } : null
             }, {
                 headers: {
-                    Authorization: `token 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`, 
+                    Authorization: `token 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`, 
                 }
             });
             if (response.status === 201) {
