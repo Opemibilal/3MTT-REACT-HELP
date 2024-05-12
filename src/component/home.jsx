@@ -1,35 +1,66 @@
 import React, { useState } from 'react';
 import Createrepo from './createrepo';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function Home({ checked }) {
-    const [repositories, setRepositories] = useState([
-        "Add New Repo",
-    ]);
-    const [Modal, setModal] = useState(false)
-
+    const [repositories, setRepositories] = useState(["Add New Repo"]);
+    const [modalIndex, setModalIndex] = useState(null);
 
     const addRepository = (newRepo) => {
         setRepositories([...repositories, newRepo]);
     };
 
-    const handleDeleteRepo = (index) => {
-        setRepositories(repositories.filter((_, i) => i !== index));
-    };
-    const handleNotDeleteRepo = (index) => {
-        setRepositories(repositories.filter((_, i) => i == index));
-    };
-
-    const handleUpdateRepo = (index) => {
-        const newName = prompt("Enter the new name for the repository:");
-        if (newName !== null && newName.trim() !== '') {
-            const updatedRepositories = [...repositories];
-            updatedRepositories[index] = newName;
-            setRepositories(updatedRepositories);
+    const handleDeleteRepo = async (index) => {
+        try {
+            const repoToDelete = repositories[index];
+            const response = await axios.delete(`https://api.github.com/repos/opemibilal/${repoToDelete}`, {
+                headers: {
+                    Authorization: `token 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`, // Replace YOUR_ACCESS_TOKEN with your GitHub access token
+                },
+            });
+            if (response.status === 204) {
+                setRepositories(repositories.filter((_, i) => i !== index));
+                setModalIndex(null); // Close the modal after deletion
+            } else {
+                toast.error('Failed to delete repository');
+            }
+        } catch (error) {
+            toast.error('Error deleting repository:', error);
         }
     };
-    const handleModal = () => {
-        setModal(true)
-    }
+
+    const handleModal = (index) => {
+        setModalIndex(index); // Set the index of the repository whose delete button is clicked
+    };
+
+    const handleNotDeleteRepo = () => {
+        setModalIndex(null);
+    };
+
+    const handleUpdateRepo = async (index) => {
+        try {
+            const newName = prompt("Enter the new name for the repository:");
+            if (newName !== null && newName.trim() !== '') {
+                const response = await axios.patch(`https://api.github.com/repos/opemibilal/${repositories[index]}`, {
+                    name: newName,
+                }, {
+                    headers: {
+                        Authorization: `token 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`, // Replace YOUR_ACCESS_TOKEN with your GitHub access token
+                    },
+                });
+                if (response.status === 200) {
+                    const updatedRepositories = [...repositories];
+                    updatedRepositories[index] = newName;
+                    setRepositories(updatedRepositories);
+                } else {
+                    console.error('Failed to update repository');
+                }
+            }
+        } catch (error) {
+            toast.error('Error updating repository:', error);
+        }
+    };
 
     return (
         <div>
@@ -52,28 +83,19 @@ function Home({ checked }) {
                             <p><span>{index + 1}.</span>{repo}</p>
                         </div>
                         <div className="buttonfield col col-3">
-                            {/* <button>{checked}</button> */}
                             <button className="btn btn-primary" onClick={() => handleUpdateRepo(index)}>Update</button>
-                            <button className="btn btn-outline-primary" onClick={handleModal}>Delete</button>
+                            <button className="btn btn-outline-primary" onClick={() => handleModal(index)}>Delete</button>
                         </div>
-                        {
-                            Modal ? (
-                                <div>
-                                    <h1>Are You Sure You Want to delete this repository</h1>
-
-                                    <div>
-                                        <button onClick={() => handleDeleteRepo(index)}>Yes</button>
-                                        <button onClick={() => handleNotDeleteRepo(index)} >No</button>
-                                    </div>
+                        {modalIndex === index && (
+                            <div>
+                                <h6>Are You Sure You Want to delete this repository</h6>
+                                <div style={{ display: "flex", gap: "20px", }}>
+                                    <button onClick={() => handleDeleteRepo(index)} style={{}}>Yes</button>
+                                    <button onClick={handleNotDeleteRepo}>No</button>
                                 </div>
-                            ) : (
-                                <div>
-                                    <h1>hello</h1>
-                                </div>
-                            )
-                        }
+                            </div>
+                        )}
                     </div>
-
                 ))}
             </div>
 

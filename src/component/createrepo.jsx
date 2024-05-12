@@ -23,7 +23,7 @@ function Createrepo({ onRepoCreated }) {
             const response = await fetch('https://api.github.com/user/repos', {
                 method: 'POST',
                 headers: {
-                    Authorization: `token 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`,
+                    Authorization: `token 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`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
