@@ -1,0 +1,59 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+  
+}
+.heading{
+    margin: 10px 40px;
+    }
+.heading div h1{
+        font-size: 25px;
+    }
+.heading div h2{
+        margin: 20px 0px 40px 0px;
+    }
+.heading .headcontent div h2 a{
+    text-decoration: none;
+    font-size: 20px;
+}
+.heading .headcontent .headbutton{
+    height: 25%;
+    padding: 0px 0px 0px 20px; 
+}
+.heading .headcontent .headbutton button{
+    width: 100%;
+}
+
+
+.mainbody .workfield{
+    border: 1px solid black;
+    padding-left: 20px;
+    padding-top: 10px;
+    margin: 0px 1px;
+}
+.mainbody .workfield .linkitem {
+    font-size: 17px;
+    margin: 7px 0px;
+}
+.mainbody .workfield .linkitem span{
+    
+    margin-right: 60px;
+}
+.mainbody .workfield .buttonfield{
+    padding: 5px 0px 0px 0px;
+}
+.mainbody .workfield .buttonfield button{
+    width: 45%;
+    height: 30px;
+    font-size: 8px;
+    padding: 0px 0px 0px 0px;
+}
+.footer{
+    
+}
