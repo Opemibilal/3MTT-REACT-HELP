@@ -57,7 +57,7 @@ function Home({ checked }) {
                     name: newName,
                 }, {
                     headers: {
-                        Authorization: `token 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`,
+                        Authorization: `token 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`,
                     },
                 });
                 if (response.status === 200) {
@@ -76,7 +76,7 @@ function Home({ checked }) {
         try {
             const response = await axios.get(`https://api.github.com/repos/feyishewa/${repoName}`, {
                 headers: {
-                    Authorization: `token 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`,
+                    Authorization: `token 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`,
                 },
             });
             if (response.status === 200) {
